@@ -12,18 +12,11 @@ namespace Main
         {
             MapData.DisplayMap();
 
-            Console.WriteLine($"플레이어 {(isXTurn ? "X" : "O")}의 차례입니다.");
-            Console.Write("위치를 선택하세요(1~9): ");
-            int index = int.Parse(Console.ReadLine());
-            
-            while(!TrySet(index, ref isXTurn, out string reason))
+            while(!TrySet(ref isXTurn, out string reason))
             {
                 MapData.DisplayMap();
 
                 Console.WriteLine(reason);
-                Console.WriteLine($"플레이어 {(isXTurn ? "X" : "O")}의 차례입니다.");
-                Console.Write("위치를 선택하세요(1~9): ");
-                index = int.Parse(Console.ReadLine());
             }
 
             if(EndCheck(out winer))
@@ -34,8 +27,18 @@ namespace Main
             return true;
         }
 
-        private static bool TrySet(int index, ref bool isXturn, out string reason)
+        private static bool TrySet(ref bool isXturn, out string reason)
         {
+            Console.WriteLine($"플레이어 {(isXTurn ? "X" : "O")}의 차례입니다.");
+            Console.Write("위치를 선택하세요(1~9): ");
+            bool result = int.TryParse(Console.ReadLine(), out int index);
+
+            if(!result)
+            {
+                reason = "잘못된 입력입니다. 1부터 9까지의 번호를 입력하세요";
+                return false;
+            }
+
             int[] currentMap = MapData.GetPlayMap();
             reason = string.Empty;
             index = index - 1;
