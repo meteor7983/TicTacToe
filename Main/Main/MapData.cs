@@ -8,7 +8,7 @@ namespace Main
         private static int[] playMap = new int[9];
         
         private static StringBuilder sb = new StringBuilder();
-        private static int level = 1;
+        private static int level;
         public static void DisplayMap()
         {
             Console.Clear();
@@ -48,5 +48,20 @@ namespace Main
         }
 
         public static int[] GetPlayMap() => playMap;
+        public static int[] GetClonePlayMap()
+        {
+            int[] createClone = new int[playMap.Length];
+            for (int i = 0; i < createClone.Length; i++)
+            {
+                createClone[i] = playMap[i];
+            }
+            return createClone;
+        }
+        public static void SetModeLevel(int getLevel) => level = getLevel;
+
+        public static void MapReset()
+        {
+            playMap = new int[playMap.Length];
+        }
     }
 }
