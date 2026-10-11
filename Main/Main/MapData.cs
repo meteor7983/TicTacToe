@@ -6,15 +6,13 @@ namespace TicTacToe
     internal static class MapData
     {
         private static int[] playMap = new int[9];
-        
         private static StringBuilder sb = new StringBuilder();
-        private static int level;
-        public static void DisplayMap()
+        public static void DisplayMap(int level)
         {
             Console.Clear();
             sb.Clear();
             sb.Append(new string('=', 3));
-            sb.Append($" 틱택토 게임 · {level}단계 ");
+            sb.Append($" 틱택토 게임 · {level + 1}단계 ");
             sb.Append(new string('=', 3));
             sb.AppendLine();
             sb.Append("두 사람이 X와 O를 번갈아 놓습니다. X가 먼저 시작합니다.\n");
@@ -57,7 +55,6 @@ namespace TicTacToe
             }
             return createClone;
         }
-        public static void SetModeLevel(int getLevel) => level = getLevel;
 
         public static void MapReset()
         {

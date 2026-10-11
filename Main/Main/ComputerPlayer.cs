@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 
 namespace TicTacToe
 {
@@ -31,12 +30,12 @@ namespace TicTacToe
         private int EsaySelect()
         {
             int[] currentMap = MapData.GetPlayMap();
-
             Random random = new Random();
+            int[] emptyPos = MapData.GetEmptyPositions();
             int index;
             while (true)
             {
-                index = random.Next(9);
+                index = emptyPos[random.Next(emptyPos.Length)];
                 if (currentMap[index] == 0)
                 {
                     return index;

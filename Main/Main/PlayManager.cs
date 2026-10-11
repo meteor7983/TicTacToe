@@ -4,29 +4,29 @@ namespace TicTacToe
 {
     internal class PlayManager
     {
-        private static bool isModeSelected = false;
-        private static bool isLevelSetected = false;
-        private static bool isXTurn = true;
-        private static bool isComputerBattle;
-        private static int level = 0;
+        private bool isModeSelected = false;
+        private bool isLevelSetected = false;
+        private bool isXTurn = true;
+        private bool isComputerBattle;
+        private int level = 0;
         private ComputerPlayer computer = null;
         private int lastComputerSelected = -1;
 
-        public bool Play(ref int winner)
+        public bool Play()
         {
             ModeAndLevelSelect();
 
-            MapData.DisplayMap();
+            MapData.DisplayMap(level);
 
             while (!TrySet(out string failReason))
             {
-                MapData.DisplayMap();
+                MapData.DisplayMap(level);
 
                 Console.WriteLine(failReason);
             }
 
             int[] currentMap = MapData.GetPlayMap();
-            if (EndCheck(ref currentMap, out winner))
+            if (EndCheck(ref currentMap, out int winner))
             {
                 ShowWinner(winner);
 
@@ -223,7 +223,7 @@ namespace TicTacToe
 
         private void ShowWinner(int winner)
         {
-            MapData.DisplayMap();
+            MapData.DisplayMap(level);
             if (winner == 0)
             {
                 Console.WriteLine($"무승부입니다!");
@@ -254,7 +254,6 @@ namespace TicTacToe
 
             if (isComputerBattle && isLevelSetected && computer == null)
             {
-                MapData.SetModeLevel(level + 1);
                 computer = new ComputerPlayer(level);
             }
         }
