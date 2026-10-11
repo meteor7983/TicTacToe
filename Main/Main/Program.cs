@@ -1,16 +1,11 @@
 ﻿using System;
-using Main;
+using TicTacToe;
 
 PlayManager playManager = new PlayManager();
 bool isPlay = true;
 int winner = 0;
 
-while (true)
+while (isPlay)
 {
     isPlay = playManager.Play(ref winner);
-
-    if(isPlay == false)
-    {
-        return;
-    }
 }

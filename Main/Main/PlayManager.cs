@@ -1,51 +1,40 @@
 ﻿using System;
 
-namespace Main
+namespace TicTacToe
 {
     internal class PlayManager
     {
         private static bool isModeSelected = false;
+        private static bool isLevelSetected = false;
         private static bool isXTurn = true;
         private static bool isComputerBattle;
-        private static int level;
-        private ComputerPlayer computer;
+        private static int level = 0;
+        private ComputerPlayer computer = null;
         private int lastComputerSelected = -1;
 
         public bool Play(ref int winner)
         {
-            if(!isModeSelected)
-            {
-                while (!TryModeSelect(out string reason))
-                {
-                    Console.WriteLine(reason);
-                }
-            }
+            ModeAndLevelSelect();
 
             MapData.DisplayMap();
 
-            while(!TrySet(out string reason))
+            while (!TrySet(out string failReason))
             {
                 MapData.DisplayMap();
 
-                Console.WriteLine(reason);
+                Console.WriteLine(failReason);
             }
 
-            if(EndCheck(out winner))
+            int[] currentMap = MapData.GetPlayMap();
+            if (EndCheck(ref currentMap, out winner))
             {
                 ShowWinner(winner);
 
                 Console.WriteLine();
-                //Console.WriteLine("재시작 하시겠습니까? (Y/N)");
-                //string restart = Console.ReadLine().Trim();
                 bool reset = RestartCheck();
                 if (reset)
                 {
-                    isModeSelected = false;
-                    isXTurn = true;
-                    isComputerBattle = false;
-                    computer = null;
-                    lastComputerSelected = -1;
-                    MapData.MapReset();
+                    InitializeData();
                 }
                 else
                 {
@@ -56,10 +45,13 @@ namespace Main
             return true;
         }
 
-        private bool TryModeSelect(out string reason)
+        private bool TryModeSelect(ref string reason)
         {
-            reason = string.Empty;
             Console.Clear();
+            if(!string.IsNullOrEmpty(reason))
+            {
+                Console.WriteLine(reason);
+            }
             Console.WriteLine("모드를 선택해 주세요");
             Console.WriteLine("1. 두 사람 대전");
             Console.WriteLine("2. 컴퓨터 대전");
@@ -72,14 +64,29 @@ namespace Main
             }
 
             isComputerBattle = selected == 1 ? false : true;
-
-            if (isComputerBattle)
+            isModeSelected = true;
+            return true;
+        }
+        private bool TryLevelSelect(ref string reason)
+        {
+            Console.Clear();
+            if (!string.IsNullOrEmpty(reason))
             {
-                MapData.SetModeLevel(2);
-                computer = new ComputerPlayer();
+                Console.WriteLine(reason);
+            }
+            Console.WriteLine("난이도를 선택해 주세요");
+            Console.WriteLine("1. 쉬움");
+            Console.WriteLine("2. 어려움");
+            bool result = int.TryParse(Console.ReadLine(), out int selected);
+
+            if (!result || selected < 0 || selected > 2)
+            {
+                reason = "잘못된 입력입니다. 1번 혹은 2번을 입력하세요";
+                return false;
             }
 
-            isModeSelected = true;
+            level = selected;
+            isLevelSetected = true;
             return true;
         }
 
@@ -124,9 +131,8 @@ namespace Main
             return true;
         }
 
-        private bool EndCheck(out int winer)
+        public static bool EndCheck(ref int[] currentMap, out int winer)
         {
-            int[] currentMap = MapData.GetPlayMap();
             winer = 0;
 
             if (currentMap[0] != 0 && currentMap[0] == currentMap[4] && currentMap[0] == currentMap[8])
@@ -226,6 +232,43 @@ namespace Main
             {
                 Console.WriteLine($"플레이어 {(winner == 1 ? "X" : "O")} 승리!");
             }
+        }
+
+        private void ModeAndLevelSelect()
+        {
+            string selectFailReason = string.Empty;
+            if (!isModeSelected)
+            {
+                while (!TryModeSelect(ref selectFailReason))
+                {
+                }
+            }
+
+            selectFailReason = string.Empty;
+            if (!isLevelSetected && isComputerBattle)
+            {
+                while (!TryLevelSelect(ref selectFailReason))
+                {
+                }
+            }
+
+            if (isComputerBattle && isLevelSetected && computer == null)
+            {
+                MapData.SetModeLevel(level + 1);
+                computer = new ComputerPlayer(level);
+            }
+        }
+
+        private void InitializeData()
+        {
+            isModeSelected = false;
+            isLevelSetected = false;
+            isXTurn = true;
+            isComputerBattle = false;
+            computer = null;
+            level = 0;
+            lastComputerSelected = -1;
+            MapData.MapReset();
         }
     }
 }

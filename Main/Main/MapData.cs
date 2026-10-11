@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Main
+namespace TicTacToe
 {
     internal static class MapData
     {
@@ -62,6 +62,35 @@ namespace Main
         public static void MapReset()
         {
             playMap = new int[playMap.Length];
+        }
+
+        public static int[] GetEmptyPositions()
+        {
+            int count = 0;
+            foreach (int index in playMap)
+            {
+                if (index != 0)
+                {
+                    continue;
+                }
+
+                count++;
+            }
+
+            int emptyPosIndex = 0;
+            int[] emptyPositions = new int[count];
+            for (int i = 0; i < playMap.Length; i++)
+            {
+                if (playMap[i] != 0)
+                {
+                    continue;
+                }
+
+                emptyPositions[emptyPosIndex] = i;
+                emptyPosIndex++;
+            }
+
+            return emptyPositions;
         }
     }
 }
