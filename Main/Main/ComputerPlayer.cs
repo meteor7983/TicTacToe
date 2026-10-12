@@ -94,13 +94,15 @@ namespace TicTacToe
         {
             int[] cloneMap = MapData.GetClonePlayMap();
             Random random = new Random();
-            if (cloneMap[4] == 0)
+            int rowCount = MapData.GetRowCount();
+            int colCount = MapData.GetColCount();
+            if (cloneMap[(rowCount * colCount - 1) / 2] == 0)
             {
-                Index = 4;
+                Index = (rowCount * colCount - 1) / 2;
             }
-            else if (cloneMap[0] == 0 || cloneMap[2] == 0 || cloneMap[6] == 0 || cloneMap[8] == 0)
+            else if (cloneMap[0] == 0 || cloneMap[colCount - 1] == 0 || cloneMap[(rowCount - 1) * colCount] == 0 || cloneMap[rowCount * colCount - 1] == 0)
             {
-                int[] checkPos = new int[] { 0, 2, 6, 8};
+                int[] checkPos = new int[] { 0, colCount - 1, (rowCount - 1) * colCount, rowCount * colCount - 1 };
                 while (true)
                 {
                     Index = checkPos[random.Next(checkPos.Length)];
