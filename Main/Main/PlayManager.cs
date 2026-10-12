@@ -134,44 +134,98 @@ namespace TicTacToe
         public static bool EndCheck(ref int[] currentMap, out int winer)
         {
             winer = 0;
+            int rowCount = MapData.GetRowCount();
+            int colCount = MapData.GetColCount();
 
             if (currentMap[0] != 0 && currentMap[0] == currentMap[4] && currentMap[0] == currentMap[8])
             {
                 winer = currentMap[0];
                 return true;
             }
-            else if(currentMap[2] != 0 && currentMap[2] == currentMap[4] && currentMap[2] == currentMap[6])
+            else if (currentMap[2] != 0 && currentMap[2] == currentMap[4] && currentMap[2] == currentMap[6])
             {
                 winer = currentMap[2];
                 return true;
             }
 
-            for (int i = 0; i < 3; i++)
+            //bool isDiagonalWin = true;
+            //int originIndex = 0;
+            //for (int col = 0; col < colCount - 1; col++)
+            //{
+            //    originIndex = col + (col * colCount);
+            //    int nextIndex = col + (col * colCount) + colCount + 1;
+
+            //    if (currentMap[originIndex] == 0 || 
+            //        currentMap[originIndex] != currentMap[nextIndex])
+            //    {
+            //        isDiagonalWin = false;
+            //    }
+            //}
+
+            //if(isDiagonalWin)
+            //{
+            //    winer = currentMap[originIndex];
+            //    return true;
+            //}
+
+            //for (int col = colCount; col > 1; col--)
+            //{
+            //    originIndex = (rowCount * col) - col;
+            //    int nextIndex = (rowCount * (col - 1)) - (col-1);
+
+            //    if (currentMap[originIndex] == 0 ||
+            //        currentMap[originIndex] != currentMap[nextIndex])
+            //    {
+            //        isDiagonalWin = false;
+            //    }
+            //}
+
+            //if (isDiagonalWin)
+            //{
+            //    winer = currentMap[originIndex];
+            //    return true;
+            //}
+
+            for (int row = 0; row < rowCount; row++)
             {
-                if (currentMap[i * 3] == 0)
+                int colIndex = 0;
+                bool isWin = true;
+                for (int col = 0; col < colCount - 1; col++)
                 {
-                    continue;
+                    colIndex = row * colCount + col;
+                    if (currentMap[colIndex] == 0 ||
+                        currentMap[colIndex] != currentMap[colIndex + 1])
+                    {
+                        isWin = false;
+                        break;
+                    }
                 }
 
-                if (currentMap[i * 3] == currentMap[i * 3 + 1] &&
-                   currentMap[i * 3 + 1] == currentMap[i * 3 + 2])
+                if(isWin)
                 {
-                    winer = currentMap[i * 3];
+                    winer = currentMap[colIndex];
                     return true;
                 }
             }
 
-            for (int i = 0; i < 3; i++)
+            for (int col = 0; col < colCount; col++)
             {
-                if (currentMap[i] == 0)
+                int rowIndex = 0;
+                bool isWin = true;
+                for (int row = 0; row < rowCount - 1; row++)
                 {
-                    continue;
+                    rowIndex = col + (row * colCount);
+                    if (currentMap[rowIndex] == 0 ||
+                        currentMap[rowIndex] != currentMap[rowIndex + colCount])
+                    {
+                        isWin = false;
+                        break;
+                    }
                 }
 
-                if (currentMap[i] == currentMap[i + 3] &&
-                   currentMap[i + 3] == currentMap[i + 6])
+                if (isWin)
                 {
-                    winer = currentMap[i];
+                    winer = currentMap[rowIndex];
                     return true;
                 }
             }

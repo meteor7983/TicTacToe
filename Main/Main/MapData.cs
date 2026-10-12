@@ -7,6 +7,10 @@ namespace TicTacToe
     {
         private static int[] playMap = new int[9];
         private static StringBuilder sb = new StringBuilder();
+
+        private static int rowCount = 3;
+        private static int colCount = 3;
+
         public static void DisplayMap(int level)
         {
             Console.Clear();
@@ -18,29 +22,46 @@ namespace TicTacToe
             sb.Append("두 사람이 X와 O를 번갈아 놓습니다. X가 먼저 시작합니다.\n");
             sb.AppendLine();
             sb.AppendLine("위치 번호:");
-            for (int row = 0; row < 3; row++)
+            for (int i = 0; i < rowCount * colCount; i++)
             {
-                int value = row * 3 + 1;
+                int rowIndex = i / colCount;
+                int colIndex = i % colCount;
 
-                sb.AppendLine($"{value} | {value + 1} | {value + 2}");
+                sb.Append($"{i + 1}");
+                if(colIndex < colCount - 1)
+                {
+                    sb.Append(" | ");
+                }
 
-                if (row < 2)
+                if (colIndex == colCount - 1 && rowIndex < rowCount - 1)
+                {
+                    sb.AppendLine();
                     sb.AppendLine("---------");
+                }
             }
 
             sb.AppendLine();
+            sb.AppendLine();
             sb.AppendLine("현재 보드:");
-            for (int row = 0; row < 3; row++)
+            for (int i = 0; i < rowCount * colCount; i++)
             {
-                string value1 = (playMap[row * 3] == 0) ? "." : (playMap[row * 3] == 1) ? "X" : "O";
-                string value2 = (playMap[row * 3 + 1] == 0) ? "." : (playMap[row * 3 + 1] == 1) ? "X" : "O";
-                string value3 = (playMap[row * 3 + 2] == 0) ? "." : (playMap[row * 3 + 2] == 1) ? "X" : "O";
+                int rowIndex = i / colCount;
+                int colIndex = i % colCount;
 
-                sb.AppendLine($"{value1} | {value2} | {value3}");
+                string value = (playMap[i] == 0) ? "." : (playMap[i] == 1) ? "X" : "O";
+                sb.Append($"{value}");
+                if (colIndex < colCount - 1)
+                {
+                    sb.Append(" | ");
+                }
 
-                if (row < 2)
+                if (colIndex == colCount - 1 && rowIndex < rowCount - 1)
+                {
+                    sb.AppendLine();
                     sb.AppendLine("---------");
+                }
             }
+            sb.AppendLine();
 
             Console.WriteLine(sb.ToString());
         }
@@ -89,5 +110,8 @@ namespace TicTacToe
 
             return emptyPositions;
         }
+
+        public static int GetColCount() => colCount;
+        public static int GetRowCount() => rowCount;
     }
 }
